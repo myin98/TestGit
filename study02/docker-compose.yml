@@ -1,0 +1,36 @@
+services:
+  
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    ports:
+      - 13306:3306
+
+    environment:
+      - MARIADB_ROOT_PASSWORD=1234
+      - MARIADB_DATABASE=edu
+    volumes:
+      - .\mariadb/conf.d:/etc/mysql/conf.d:ro
+      - .\mariadb\data:/var/lib/mysql:rw
+      - .\mariadb\initdb.d:/docker-entrypoint-initdb.d:ro
+    networks:
+      - myNet
+
+  springboot:
+    container_name: springboot
+    build: 
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 80:8080
+    depends_on:
+      - mariadb
+    links:
+      - mariadb
+    command: sleep infinity
+    networks:
+      - myNet
+
+networks:
+  myNet:

@@ -1,0 +1,26 @@
+FROM gradle:latest
+
+WORKDIR /app
+
+RUN git clone https://github.com/myin98/TestGit.git
+
+WORKDIR /app/TestGit
+RUN gradle clean test bootJar
+
+EXPOSE 8080
+
+# ENTRYPOINT [ "sleep", "infinity" ]
+ENTRYPOINT [ "java" , "-jar", "/app/TestGit/build/libs/TestGit-1.jar" ]
+
+# docker build . -t boot --no-cache
+# docker run -d -p 80:8080 --name App boot
+# 스프링 컨테이너 생성
+
+# docker run -d -p 13306:3306 -e MARIADB_ROOT_PASSWORD=1234 -e MARIADB_DATABASE=edu --name mariadb mariadb
+# 데이타 베이스 컨테이너 생성
+
+# docker network list (bridge 사용)
+# docker network inspect b632df6e37e3 (네트워크 아이디)
+
+# docker-compose build --no-cache (도커컴포즈 캐쉬 비우고 새로 생성)
+# docker compose up -d (컴포즈 파일 실행)
